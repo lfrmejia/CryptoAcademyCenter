@@ -1,56 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Crypto Academy Center</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Academy Login Page</title>
+    <script src="https://cdn.auth0.com/js/auth0/9.22/auth0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .login-container h2 {
+            margin: 0 auto;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+        @media (max-width: 480px) {
+            .login-container {
+                width: 90%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Crypto Academy Center</h1>
-  </header>
+    <div class="login-container">
+        <h2>Login</h2>
+        <button id="loginButton">Login with Auth0</button>
+        <p style="text-align: center; margin-top: 10px;">
+            <a href="/forgot-password" style="color: #4CAF50; text-decoration: none;">Forgot your password?</a>
+        </p>
+    </div>
 
-  <main>
-    <h2>Login</h2>
-    <p>Sign in to access the Crypto Academy Center.</p>
-    <button id="login">Log In</button>
-  </main>
+    <script>
+        // Initialize Auth0 client
+        const auth0 = new auth0.WebAuth({
+            domain: 'dev-v71b1kad1qrpea4h.us.auth0.com', // Auth0 domain
+            clientID: 'S1OgDqikNDLbbspTD6EViRlQsq19gTMz', // Auth0 client ID
+            redirectUri: 'https://lfrmejia.github.io/CryptoAcademyCenter/callback.html', // callback URL
+            responseType: 'token id_token',
+            scope: 'openid profile email'
+        });
 
-  <footer>
-    <p>&copy; 2024 CryptoAcademyCenter</p>
-  </footer>
-
-  <script>
-    // Initialize Auth0 client
-    let auth0 = null;
-
-    window.onload = async () => {
-      auth0 = await createAuth0Client({
-        domain: "dev-v71b1kad1qrpea4h.us.auth0.com", // Auth0 domain
-        client_id: "S1OgDqikNDLbbspTD6EViRlQsq19gTMz", // Auth0 client ID
-        redirect_uri: window.location.origin + "/index.html" // Redirect to index.html upon login
-      });
-
-      // If returning from Auth0 callback
-      const query = window.location.search;
-      if (query.includes("code=") && query.includes("state=")) {
-        await auth0.handleRedirectCallback();
-        window.history.replaceState({}, document.title, "/login.html");
-
-        // Redirect to index.html after successful login
-        const user = await auth0.getUser();
-        if (user) {
-          window.location.href = "index.html";
-        }
-      }
-    };
-
-    // Log In function
-    document.getElementById("login").addEventListener("click", async () => {
-      await auth0.loginWithRedirect();
-    });
-  </script>
+        // Handle login button click
+        document.getElementById('loginButton').addEventListener('click', () => {
+            auth0.authorize();
+        });
+    </script>
 </body>
 </html>
