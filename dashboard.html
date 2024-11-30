@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crypto Dashboard</title>
-#  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
@@ -34,16 +34,10 @@
       background-color: #2c3e50;
       color: white;
     }
-    #historical-chart {
-      display: block;
-      margin: 20px auto;
-      width: 90%; /* Adjust width for responsiveness */
-      height: 500px; /* Increase height for larger display */
-    }
     canvas {
-      background: #fff;
-      border: 1px solid #ddd;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 90%;
+      margin: 20px auto;
+      display: block;
     }
     #loading {
       text-align: center;
@@ -68,7 +62,6 @@
       </ul>
     </nav>
   </header>
-
   <main>
     <div id="loading">Loading data, please wait...</div>
     <section>
@@ -95,7 +88,7 @@
         <option value="ethereum">Ethereum</option>
         <option value="dogecoin">Dogecoin</option>
       </select>
-      <canvas id="historical-chart" width="1000" height="500"></canvas>
+      <canvas id="historical-chart"></canvas>
     </section>
   </main>
 
