@@ -2,6 +2,22 @@ function showAlert() {
     alert("Thanks for visiting CryptoAcademyCenter!");
   }
 
+import createAuth0Client from '@auth0/auth0-spa-js';
+
+let auth0Client;
+
+async function initAuth0() {
+  auth0Client = await createAuth0Client({
+    domain: 'dev-v71b1kad1qrpea4h.us.auth0.com',
+    client_id: 'S1OgDqikNDLbbspTD6EViRlQsq19gTMz',
+    redirect_uri: window.location.origin,
+  });
+}
+
+initAuth0();
+
+
+
   // Base API URL
 const COINCAP_API = "https://api.coincap.io/v2";
 
