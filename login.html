@@ -55,20 +55,26 @@
             <a href="/forgot-password" style="color: #4CAF50; text-decoration: none;">Forgot your password?</a>
         </p>
     </div>
-
     <script>
         // Initialize Auth0 client
         const auth0 = new auth0.WebAuth({
-            domain: 'dev-v71b1kad1qrpea4h.us.auth0.com', // Auth0 domain
-            clientID: 'S1OgDqikNDLbbspTD6EViRlQsq19gTMz', // Auth0 client ID
-            redirectUri: 'https://lfrmejia.github.io/CryptoAcademyCenter/callback.html', // callback URL
+            domain: 'dev-v71b1kad1qrpea4h.us.auth0.com',
+            clientID: 'S1OgDqikNDLbbspTD6EViRlQsq19gTMz',
+            redirectUri: 'https://lfrmejia.github.io/CryptoAcademyCenter/', // deployment URL
             responseType: 'token id_token',
             scope: 'openid profile email'
         });
 
-        // Handle login button click
+        // Handle login
         document.getElementById('loginButton').addEventListener('click', () => {
             auth0.authorize();
+        });
+
+        // Handle logout
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            auth0.logout({
+                returnTo: 'https://lfrmejia.github.io/CryptoAcademyCenter/', // deployment URL
+                clientID: 'S1OgDqikNDLbbspTD6EViRlQsq19gTMz'
         });
     </script>
 </body>
