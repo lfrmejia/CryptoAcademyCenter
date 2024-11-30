@@ -50,15 +50,16 @@
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form action="/login" method="post">
+        <form id="loginForm" method="post">
             <input type="text" name="username" placeholder="Username" required aria-label="Username">
             <input type="password" name="password" placeholder="Password" required aria-label="Password">
-            <button type="submit">Login</button>
+            <button type="submit" id="loginButton">Login</button>
         </form>
         <p style="text-align: center; margin-top: 10px;">
             <a href="/forgot-password" style="color: #4CAF50; text-decoration: none;">Forgot your password?</a>
         </p>
     </div>
+
     <script>
         // Initialize Auth0 client
         const auth0 = new auth0.WebAuth({
@@ -70,16 +71,21 @@
         });
 
         // Handle login
-        document.getElementById('loginButton').addEventListener('click', () => {
-            auth0.authorize();
+        document.getElementById('loginButton').addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent form submission
+            auth0.authorize(); // Trigger Auth0 login
         });
 
-        // Handle logout
+        // Handle logout (if you want to include logout button functionality later)
+        // You can include the following in the body if you want logout functionality
+        /*
         document.getElementById('logoutButton').addEventListener('click', () => {
             auth0.logout({
                 returnTo: 'https://lfrmejia.github.io/CryptoAcademyCenter/', // deployment URL
                 clientID: 'S1OgDqikNDLbbspTD6EViRlQsq19gTMz'
+            });
         });
+        */
     </script>
 </body>
 </html>
