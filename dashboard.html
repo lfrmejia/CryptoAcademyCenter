@@ -3,62 +3,187 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Student Website</title>
+  <title>Crypto Dashboard</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background-color: white;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    canvas {
+      max-width: 90%;
+      margin: 20px auto;
+      display: block;
+    }
+    #loading {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #555;
+    }
+    #crypto-selector {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      font-size: 1rem;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="resources.html">Resources</a></li>
-      </ul>
-    </nav>
+    <h1>Crypto Dashboard</h1>
+    <p>Live Prices, Market Trends, and Historical Data (15 Days)</p>
   </header>
+
   <main>
-    <!-- Live Prices Section -->
-    <section id="live-prices">
-      <h2>Live Cryptocurrency Prices</h2>
-      <div id="price-container"></div>
-    </section>
-    
-    <!-- Market Trends Section -->
-    <section id="market-trends">
-      <h2>Market Trends</h2>
-      <canvas id="market-chart"></canvas>
-    </section>
-    
-    <!-- Historical Performance Section -->
-    <section id="historical-performance">
-      <h2>Historical Performance</h2>
-      <div id="history-container"></div>
-    </section>
-    
-    <!-- CoinCap Market Data Section -->
-    <section id="market-data">
-      <h2>CoinCap Market Data</h2>
-      <table id="markets-table">
+    <div id="loading">Loading data, please wait...</div>
+    <section>
+      <h2>Current Prices</h2>
+      <table id="prices-table">
         <thead>
           <tr>
-            <th>Exchange</th>
-            <th>Base Currency</th>
-            <th>Quote Currency</th>
-            <th>Price USD</th>
-            <th>Volume (USD)</th>
+            <th>Cryptocurrency</th>
+            <th>Price (USD)</th>
+            <th>Market Cap (USD)</th>
+            <th>24h Change (%)</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Market data will be inserted here -->
+          <!-- Data will be populated here dynamically -->
         </tbody>
       </table>
     </section>
+
+    <section>
+      <h2>Historical Performance (15 Days)</h2>
+      <select id="crypto-selector" onchange="fetchHistoricalData(this.value)">
+        <option value="bitcoin">Bitcoin</option>
+        <option value="ethereum">Ethereum</option>
+        <option value="dogecoin">Dogecoin</option>
+      </select>
+      <canvas id="historical-chart"></canvas>
+    </section>
   </main>
-  
+
   <footer>
-    <p>&copy; 2024 CryptoAcademyCenter</p>
+    <p>&copy; 2024 Crypto Dashboard</p>
   </footer>
-  
-  <script src="script.js"></script>
+
+  <script>
+    const BASE_URL = "https://api.coincap.io/v2";
+
+    // Fetch current market data
+    async function fetchPrices() {
+      try {
+        const response = await fetch(`${BASE_URL}/assets?limit=10`);
+        const data = await response.json();
+        populatePricesTable(data.data);
+      } catch (error) {
+        console.error("Error fetching prices:", error);
+        document.querySelector("#prices-table tbody").innerHTML = 
+          "<tr><td colspan='4'>Failed to load data. Please try again later.</td></tr>";
+      } finally {
+        document.getElementById("loading").style.display = "none";
+      }
+    }
+
+    // Populate current prices in the table
+    function populatePricesTable(assets) {
+      const tbody = document.querySelector("#prices-table tbody");
+      tbody.innerHTML = "";
+
+      assets.forEach(asset => {
+        const row = `
+          <tr>
+            <td>${asset.name} (${asset.symbol})</td>
+            <td>$${parseFloat(asset.priceUsd).toFixed(2)}</td>
+            <td>$${(parseFloat(asset.marketCapUsd) / 1e9).toFixed(2)} B</td>
+            <td>${parseFloat(asset.changePercent24Hr).toFixed(2)}%</td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+    }
+
+    // Fetch historical data for a specific cryptocurrency
+    async function fetchHistoricalData(assetId = "bitcoin") {
+      try {
+        document.getElementById("loading").style.display = "block";
+        const end = Date.now();
+        const start = end - 15 * 24 * 60 * 60 * 1000; // 15 days ago
+        const response = await fetch(`${BASE_URL}/assets/${assetId}/history?interval=d1&start=${start}&end=${end}`);
+        const data = await response.json();
+        renderHistoricalChart(data.data, assetId);
+      } catch (error) {
+        console.error("Error fetching historical data:", error);
+        alert("Failed to load historical data. Please try again.");
+      } finally {
+        document.getElementById("loading").style.display = "none";
+      }
+    }
+
+    // Render historical data chart using Chart.js
+    function renderHistoricalChart(history, assetId) {
+      const labels = history.map(item => new Date(item.time).toLocaleDateString());
+      const prices = history.map(item => parseFloat(item.priceUsd));
+
+      const ctx = document.getElementById("historical-chart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [{
+            label: `${assetId.charAt(0).toUpperCase() + assetId.slice(1)} Price (USD)`,
+            data: prices,
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: true,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: true },
+          },
+          scales: {
+            x: { title: { display: true, text: "Date" } },
+            y: { title: { display: true, text: "Price (USD)" } },
+          }
+        }
+      });
+    }
+
+    // Initialize the dashboard
+    async function init() {
+      await fetchPrices();
+      await fetchHistoricalData();
+    }
+
+    // Load data when the page is ready
+    window.onload = init;
+  </script>
 </body>
 </html>
