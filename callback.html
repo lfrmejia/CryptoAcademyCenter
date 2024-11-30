@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Callback</title>
-  <script>
-    // Redirect back to the main application
-    window.onload = function () {
-      window.location.href = "https://lfrmejia.github.io/CryptoAcademyCenter/";
-    };
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callback</title>
+    <script src="https://cdn.auth0.com/js/auth0/9.22/auth0.min.js"></script>
 </head>
 <body>
-  <p>Redirecting...</p>
+    <h1>Processing Login...</h1>
+    <script>
+        const auth0 = new auth0.WebAuth({
+            domain: 'dev-v71b1kad1qrpea4h.us.auth0.com',
+            clientID: 'S1OgDqikNDLbbspTD6EViRlQsq19gTMz'
+        });
+
+        // Parse hash and handle tokens
+        auth0.parseHash((err, authResult) => {
+            if (authResult && authResult.accessToken && authResult.idToken) {
+                // Save tokens or process the user info
+                localStorage.setItem('accessToken', authResult.accessToken);
+                localStorage.setItem('idToken', authResult.idToken);
+                window.location.href = '/'; // Redirect back to the main app
+            } else if (err) {
+                console.error('Error parsing hash:', err);
+            }
+        });
+    </script>
 </body>
 </html>
