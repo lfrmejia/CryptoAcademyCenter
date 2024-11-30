@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Student Website</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="resources.html">Resources</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <!-- Live Prices Section -->
+    <section id="live-prices">
+      <h2>Live Cryptocurrency Prices</h2>
+      <div id="price-container"></div>
+    </section>
+    
+    <!-- Market Trends Section -->
+    <section id="market-trends">
+      <h2>Market Trends</h2>
+      <canvas id="market-chart"></canvas>
+    </section>
+    
+    <!-- Historical Performance Section -->
+    <section id="historical-performance">
+      <h2>Historical Performance</h2>
+      <div id="history-container"></div>
+    </section>
+    
+    <!-- CoinCap Market Data Section -->
+    <section id="market-data">
+      <h2>CoinCap Market Data</h2>
+      <table id="markets-table">
+        <thead>
+          <tr>
+            <th>Exchange</th>
+            <th>Base Currency</th>
+            <th>Quote Currency</th>
+            <th>Price USD</th>
+            <th>Volume (USD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Market data will be inserted here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+  
+  <footer>
+    <p>&copy; 2024 CryptoAcademyCenter</p>
+  </footer>
+  
+  <script src="script.js"></script>
+</body>
+</html>
