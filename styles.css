@@ -106,8 +106,8 @@ h2 {
 #historical-chart {
       display: block;
       margin: 20px auto;
-      width: 90%; /* Adjust width for responsiveness */
-      height: 500px; /* Increase height for larger display */
+      width: 70%; /* Adjust width for responsiveness */
+      height: 300px; /* Increase height for larger display */
     }
 
 /* Footer */
