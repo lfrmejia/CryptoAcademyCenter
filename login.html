@@ -21,12 +21,22 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers the inputs and button horizontally */
         }
         .login-container h2 {
             margin: 0 auto;
             text-align: center;
             width: 100%;
             margin-bottom: 20px;
+        }
+        .login-container input {
+            width: 100%; /* Ensure input fields take up the full container width */
+            padding: 10px;
+            margin: 10px 0; /* Add vertical spacing between inputs */
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         .login-container button {
             width: 100%;
@@ -36,6 +46,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 10px; /* Add space between the button and input fields */
         }
         .login-container button:hover {
             background-color: #45a049;
@@ -75,17 +86,6 @@
             event.preventDefault(); // Prevent form submission
             auth0.authorize(); // Trigger Auth0 login
         });
-
-        // Handle logout (if you want to include logout button functionality later)
-        // You can include the following in the body if you want logout functionality
-        /*
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            auth0.logout({
-                returnTo: 'https://lfrmejia.github.io/CryptoAcademyCenter/', // deployment URL
-                clientID: 'S1OgDqikNDLbbspTD6EViRlQsq19gTMz'
-            });
-        });
-        */
     </script>
 </body>
 </html>
